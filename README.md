@@ -5,7 +5,7 @@ A simple race car implemented in C++ and SFML for the sake of studying angular m
 ![Car racing gif](car.gif)
 
 ## Controls
-**WASD, Arrows** -> Movement
+**WASD, Arrows** -> Movement<br>
 **R** -> Put car in the center of the screen again
 
 
