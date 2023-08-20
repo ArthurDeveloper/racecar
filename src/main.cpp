@@ -23,11 +23,10 @@ enum direction {
 
 class Car {
 private:
-	float x, y, angle, acceleration, turnSpeed, turnAcceleration, maxSpeed, maxTurnSpeed;
+	float x, y, angle, acceleration, speed, turnSpeed, turnAcceleration, maxSpeed, maxTurnSpeed;
 	bool turning;
 	enum direction direction;
 	enum direction turnDirection;
-	sf::Vector2f velocity;
 	sf::Texture texture;
 	sf::Sprite sprite;
 
@@ -76,20 +75,13 @@ public:
 
 		angle += turnSpeed * dt;
 
-		velocity.x += cos(angle * pi / 180) * acceleration * direction * dt;
-		velocity.y += sin(angle * pi / 180) * acceleration * direction * dt;
-		if (magnitude(velocity) > maxSpeed) {
-			velocity.x = cos(angle * pi / 180) * maxSpeed * direction;
-			velocity.y = sin(angle * pi / 180) * maxSpeed * direction;
+		speed += acceleration * dt;
+		if (speed > maxSpeed) {
+			speed = maxSpeed;
 		}
 
-		if (direction == NONE) {
-			velocity.x = 0;
-			velocity.y = 0;
-		}
-
-		x += velocity.x * dt;
-		y += velocity.y * dt;
+		x += cos(angle * pi / 180) * speed * direction * dt;
+		y += sin(angle * pi / 180) * speed * direction * dt;
 		
 		sprite.setRotation(90.f + angle);
 		sprite.setPosition(x, y);
