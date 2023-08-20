@@ -73,12 +73,14 @@ public:
 		y = (float) windowHeight / 2;
 		angle = 0;
 		turnSpeed = 0;
+		direction = NONE;
+		turnDirection = NONE;
+
 		this->acceleration = acceleration;
 		this->turnAcceleration = turnAcceleration;
 		this->maxSpeed = maxSpeed;
 		this->maxTurnSpeed = maxTurnSpeed;
-		direction = NONE;
-		turnDirection = NONE;
+		
 		texture.loadFromFile("res/car.png");
 		sprite.setTexture(texture);
 		sprite.setOrigin((float)texture.getSize().x / 2, (float)texture.getSize().y / 2);
@@ -198,7 +200,10 @@ int main() {
 		}
 
 		window.clear(sf::Color::Blue);
+		
 		car.update(dt);
+		
+		cam.aimAt(car.position());
 		cam.update(dt);
 		cam.clamp(
 		{0.f + view.getSize().x / 2, 0.f + view.getSize().y / 2},
@@ -206,7 +211,7 @@ int main() {
 		);
 		view.setCenter(cam.position());
 		window.setView(view);
-		cam.aimAt(car.position());
+		
 		map.draw(window);
 		car.draw(window);
 		window.display();
