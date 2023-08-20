@@ -17,6 +17,48 @@ enum direction {
 	LEFT = -1,
 };
 
+class Camera {
+private:
+	float x, y;
+	sf::Vector2f target;
+
+public:
+	Camera(sf::Vector2f target) {
+		aimAt(target);
+	}
+
+	sf::Vector2f position() {
+		return {x, y};
+	}
+
+	void aimAt(sf::Vector2f target) {
+		this->target = target;
+	}
+
+	void clamp(sf::Vector2f min, sf::Vector2f max) {
+		if (x < min.x) {
+			x = min.x;
+		}
+
+		if (x > max.x) {
+			x = max.x;
+		}
+
+		if (y < min.y) {
+			y = min.y;
+		}
+
+		if (y > max.y) {
+			y = max.y;
+		}
+	}
+
+	void update(float dt) {
+		x = target.x;
+		y = target.y;
+	}
+};
+
 class Car {
 private:
 	float x, y, angle, acceleration, speed, turnSpeed, turnAcceleration, maxSpeed, maxTurnSpeed;
@@ -41,6 +83,10 @@ public:
 		sprite.setTexture(texture);
 		sprite.setOrigin((float)texture.getSize().x / 2, (float)texture.getSize().y / 2);
 		sprite.setRotation(90);
+	}
+
+	sf::Vector2f position() {
+		return {x, y};
 	}
 
 	void resetPosition() {
@@ -74,6 +120,10 @@ public:
 			speed = maxSpeed;
 		}
 
+		if (direction == NONE) {
+			speed = 0;
+		}
+
 		x += cos(angle * pi / 180) * speed * direction * dt;
 		y += sin(angle * pi / 180) * speed * direction * dt;
 		
@@ -86,10 +136,32 @@ public:
 	}
 };
 
+class Map {
+private:
+	sf::Texture texture;
+	sf::Sprite sprite;
+
+public:
+	Map() {
+		texture.loadFromFile("res/map.png");
+		sprite.setTexture(texture);
+		sprite.setPosition(0, 0);
+	}
+
+	void draw(sf::RenderWindow& window) {
+		window.draw(sprite);
+	}
+};
+
 int main() {
 	int options = sf::Style::Titlebar;
 	sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Car racing", options);
+	sf::View view(sf::FloatRect(0.0f, 0.0f, windowWidth, windowHeight));
+	window.setView(view);
+
 	Car car(500, 450, 500, 200);
+	Camera cam(car.position());
+	Map map;
 
 	sf::Clock clock;
 	while (window.isOpen()) {
@@ -127,6 +199,15 @@ int main() {
 
 		window.clear(sf::Color::Blue);
 		car.update(dt);
+		cam.update(dt);
+		cam.clamp(
+		{0.f + view.getSize().x / 2, 0.f + view.getSize().y / 2},
+		{1920.f - view.getSize().x / 2, 1080.f - view.getSize().y / 2}
+		);
+		view.setCenter(cam.position());
+		window.setView(view);
+		cam.aimAt(car.position());
+		map.draw(window);
 		car.draw(window);
 		window.display();
 	}
