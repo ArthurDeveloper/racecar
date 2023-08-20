@@ -2,6 +2,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Window/WindowStyle.hpp>
 #include <cmath>
 #include <math.h>
 
@@ -156,7 +157,7 @@ public:
 };
 
 int main() {
-	int options = sf::Style::Titlebar;
+	int options = sf::Style::Titlebar | sf::Style::Resize;
 	sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Car racing", options);
 	sf::View view(sf::FloatRect(0.0f, 0.0f, windowWidth, windowHeight));
 	window.setView(view);
@@ -178,6 +179,10 @@ int main() {
 				if (evt.key.scancode == sf::Keyboard::Scancode::R) {
 					car.resetPosition();
 				}
+			}
+
+			if (evt.type == sf::Event::Resized) {
+				view.setSize(evt.size.width, evt.size.height);
 			}
 		}
 
