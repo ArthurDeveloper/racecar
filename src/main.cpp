@@ -9,10 +9,6 @@ const long double pi = 3.141592653589793238462643383279502884L;
 const int windowWidth = 960;
 const int windowHeight = 540;
 
-float magnitude(sf::Vector2f vec) {
-	return sqrt(vec.x * vec.x + vec.y * vec.y);
-}
-
 enum direction {
 	NONE = 0,
 	FORWARD = -1,
@@ -24,7 +20,6 @@ enum direction {
 class Car {
 private:
 	float x, y, angle, acceleration, speed, turnSpeed, turnAcceleration, maxSpeed, maxTurnSpeed;
-	bool turning;
 	enum direction direction;
 	enum direction turnDirection;
 	sf::Texture texture;
@@ -40,7 +35,6 @@ public:
 		this->turnAcceleration = turnAcceleration;
 		this->maxSpeed = maxSpeed;
 		this->maxTurnSpeed = maxTurnSpeed;
-		turning = false;
 		direction = NONE;
 		turnDirection = NONE;
 		texture.loadFromFile("res/car.png");
