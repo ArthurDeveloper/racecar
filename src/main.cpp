@@ -188,17 +188,17 @@ int main() {
 
 		float dt = clock.restart().asSeconds();
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 			car.move(FORWARD);
-		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
 			car.move(BACKWARD);
 		} else {
 			car.move(NONE);
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 			car.turn(RIGHT);
-		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 			car.turn(LEFT);
 		} else {
 			car.turn(NONE);
